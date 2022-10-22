@@ -1,5 +1,7 @@
 # TI-caption-corrector
-Corrects TI caption files
+Corrects TI caption files, expects captions and images to sit along side each other in the same directory, exects the caption filenaame to be the same as the image filename except having a `.txt` extension.
+
+Attempts to prevent line deletions and insertions to that the line numbers match up with a sorted list of the captioned images.
 
 ## Usage
 
