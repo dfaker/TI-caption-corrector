@@ -45,7 +45,9 @@ def save():
         if newline != oldline[2]:
             changeCount += 1
             open(oldline[1], 'w').write(newline)
-            print(oldline[1], 'change:', oldline[2], '->', newline)
+            print('\nfile:',oldline[1])
+            print('old caption:',oldline[2])
+            print('new caption:',newline)
     print('changes: ', changeCount)
 
 
