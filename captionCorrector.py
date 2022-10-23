@@ -22,7 +22,7 @@ for f in os.listdir(sourcedir):
     path_txt = os.path.join(sourcedir, txt_f)
 
     if os.path.exists(path_f) and os.path.exists(path_txt):
-        file_caption_sets.append((path_f, path_txt, open(path_txt, 'r').read()))
+        file_caption_sets.append([path_f, path_txt, open(path_txt, 'r').read()])
 
 file_caption_sets = sorted(file_caption_sets)
 
@@ -36,8 +36,12 @@ txtind = 0
 txt.insert("0.0", '\n'.join([x[2].strip().replace('\n',' ') for x in file_caption_sets]).strip())
 txt.configure(undo=True)
 
+root.title('Caption Corrector - 0 Changes')
 
-def save():
+save = None
+
+def saveChanges(e=None):
+    print('----')
     print('saving')
     captions = [x.strip() for x in txt.get("1.0", tk.END).split('\n')]
     changeCount = 0
@@ -45,13 +49,18 @@ def save():
         if newline != oldline[2]:
             changeCount += 1
             open(oldline[1], 'w').write(newline)
-            print('\nfile:',oldline[1])
-            print('old caption:',oldline[2])
-            print('new caption:',newline)
-    print('changes: ', changeCount)
+            print('----')
+            print('change', changeCount, 'file:',oldline[1])
+            print('old caption:', oldline[2])
+            print('new caption:', newline)
+            oldline[2] = newline
+    if changeCount == 0:
+        print('No changes.')
+    root.title('Caption Corrector - 0 Changes')
+    save.configure(text='Save')
 
 
-save = tk.Button(root, text='Save', command=save)
+save = tk.Button(root, text='Save', command=saveChanges)
 
 root.columnconfigure(0, weight=1)
 root.rowconfigure(0, weight=1)
@@ -75,14 +84,26 @@ def changeSelection():
     if len(captions)-1 != len(file_caption_sets):
         txt.edit_undo()
 
+    changeCount = 0
+    for newline, oldline in zip(captions, file_caption_sets):
+        if newline != oldline[2]:
+            changeCount+=1
+
+    root.title('Caption Corrector - {} Changes'.format(changeCount))
+    if changeCount == 0:
+        save.configure(text='Save'.format(changeCount))
+    else:
+        save.configure(text='Save - {} Changes'.format(changeCount))
+
+
 
 def changeSelectionEvt(e):
     root.after(100, changeSelection)
-
 
 txt.bind('<<Selection>>', changeSelectionEvt)
 txt.bind('<Key>', changeSelectionEvt)
 txt.bind('<1>', changeSelectionEvt)
 txt.bind('<2>', changeSelectionEvt)
+txt.bind('<Control-s>', saveChanges)
 
 root.mainloop()
