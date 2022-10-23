@@ -7,6 +7,6 @@ Attempts to prevent line deletions and insertions to that the line numbers match
 
 captionCorrector.py K:\directory\path
 
-![image](https://user-images.githubusercontent.com/35278260/197368015-9a5209b3-eea7-4caa-9ee3-2e81fbfd6971.png)
+![demo image](https://user-images.githubusercontent.com/35278260/197368033-70c8ae9b-5f0a-44c9-8bfe-978fe32b5597.png)
 
 Each caption is displayed on a single line, moving between lines moves between images, click save to save edits to caption files.
