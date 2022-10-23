@@ -31,7 +31,7 @@ root.geometry("1224x800")
 
 image = ImageTk.PhotoImage(Image.open(file_caption_sets[0][0]).resize((512, 512)))
 label = tk.Label(root, image=image)
-txt = tk.Text(root, spacing1=10, spacing2=10)
+txt = tk.Text(root, spacing1=15, spacing2=0)
 txtind = 0
 txt.insert("0.0", '\n'.join([x[2].strip().replace('\n',' ') for x in file_caption_sets]).strip())
 txt.configure(undo=True)
@@ -39,6 +39,7 @@ txt.configure(undo=True)
 root.title('Caption Corrector - 0 Changes')
 
 save = None
+
 
 def saveChanges(e=None):
     print('----')
@@ -58,6 +59,10 @@ def saveChanges(e=None):
         print('No changes.')
     root.title('Caption Corrector - 0 Changes')
     save.configure(text='Save')
+    for tag in txt.tag_names():
+        if tag == 'changedline':
+            print('tag_delete')
+            txt.tag_delete(tag)
 
 
 save = tk.Button(root, text='Save', command=saveChanges)
@@ -84,10 +89,17 @@ def changeSelection():
     if len(captions)-1 != len(file_caption_sets):
         txt.edit_undo()
 
+    for tag in txt.tag_names():
+        if tag == 'changedline':
+
+            txt.tag_delete(tag)
+    txt.tag_configure('changedline', foreground='blue')
+
     changeCount = 0
-    for newline, oldline in zip(captions, file_caption_sets):
+    for i, (newline, oldline) in enumerate(zip(captions, file_caption_sets)):
         if newline != oldline[2]:
             changeCount+=1
+            txt.tag_add('changedline', '{}.0 '.format(i+1), '{}.{}'.format(i+1,len(newline)))
 
     root.title('Caption Corrector - {} Changes'.format(changeCount))
     if changeCount == 0:
@@ -96,9 +108,9 @@ def changeSelection():
         save.configure(text='Save - {} Changes'.format(changeCount))
 
 
-
 def changeSelectionEvt(e):
     root.after(100, changeSelection)
+
 
 txt.bind('<<Selection>>', changeSelectionEvt)
 txt.bind('<Key>', changeSelectionEvt)
