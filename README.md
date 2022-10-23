@@ -9,4 +9,4 @@ captionCorrector.py K:\directory\path
 
 ![demo image](https://user-images.githubusercontent.com/35278260/197368033-70c8ae9b-5f0a-44c9-8bfe-978fe32b5597.png)
 
-Each caption is displayed on a single line, moving between lines moves between images, unsaved changed lines are shown in blue, click save to save edits to caption files.
+Each caption is displayed on a single line, moving between lines moves between images, unsaved changed lines are shown in blue, click save or `Ctrl-s` to save edits to caption files.
